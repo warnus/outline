@@ -53,8 +53,15 @@ async function start(id: string, disconnect: () => void) {
   // If a --port flag is passed then it takes priority over the env variable
   const normalizedPortFlag = getArg("port", "p");
 
+  const fs = require('fs');
+  const https = require('https');
   const app = new Koa();
+  const option = {
+	key: fs.readFileSync('/Users/victor/001_dev/outline/localhost-key.pem'),
+	cert: fs.readFileSync('/Users/victor/001_dev/outline/localhost.pem')
+  }
   const server = stoppable(http.createServer(app.callback()));
+  //const server = stoppable(https.createServer(option, app.callback()));
   const router = new Router();
 
   // install basic middleware shared by all services

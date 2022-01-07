@@ -16,7 +16,8 @@ export const uploadFile = async (
   const response = await client.post("/attachments.create", {
     public: options.public,
     documentId: options.documentId,
-    contentType: file.type,
+    // contentType: file.type,
+    contentType: file.type ? file.type : "application/octet-stream",
     size: file.size,
     name,
   });

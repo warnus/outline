@@ -54,6 +54,8 @@ export type Props = {|
   onCreateLink?: (title: string) => Promise<string>,
   onImageUploadStart?: () => any,
   onImageUploadStop?: () => any,
+  onFileUploadStart?: () => any,
+  onFileUploadStop?: () => any,
 |};
 
 type PropsWithRef = Props & {
@@ -68,6 +70,14 @@ function Editor(props: PropsWithRef) {
   const isPrinting = useMediaQuery("print");
 
   const onUploadImage = React.useCallback(
+    async (file: File) => {
+      const result = await uploadFile(file, { documentId: id });
+      return result.url;
+    },
+    [id]
+  );
+
+  const onUpload = React.useCallback(
     async (file: File) => {
       const result = await uploadFile(file, { documentId: id });
       return result.url;
@@ -186,6 +196,7 @@ function Editor(props: PropsWithRef) {
       <StyledEditor
         ref={props.forwardedRef}
         uploadImage={onUploadImage}
+        uploadFile={onUpload}
         onClickLink={onClickLink}
         onShowToast={onShowToast}
         embeds={props.disableEmbeds ? EMPTY_ARRAY : embeds}
